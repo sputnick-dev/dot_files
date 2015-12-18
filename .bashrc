@@ -115,37 +115,38 @@ else
   rvm_env=""
 fi
 
-test -e /usr/share/git/completion/git-prompt.sh && . /usr/share/git/completion/git-prompt.sh
-test -e /usr/lib/git-core/git-sh-prompt && . /usr/lib/git-core/git-sh-prompt
+  test -e /usr/share/git/completion/git-prompt.sh && . /usr/share/git/completion/git-prompt.sh
+  test -e /usr/lib/git-core/git-sh-prompt && . /usr/lib/git-core/git-sh-prompt
+  test -e ~/.git-prompt.sh && . ~/.git-prompt.sh
 
-git_branch_color(){
-  if git rev-parse --git-dir >/dev/null 2>&1
-  then
-    color=""
-    if git diff --quiet 2>/dev/null >&2
+  git_branch_color(){
+    if git rev-parse --git-dir >/dev/null 2>&1
     then
-      color="$GREEN"
+      color=""
+      if git diff --quiet 2>/dev/null >&2
+      then
+        color="$GREEN"
+      else
+        color="$YELLOW"
+      fi
     else
-      color="$YELLOW"
+      return 0
     fi
-  else
-    return 0
-  fi
-  echo -ne $color
-}
+    echo -ne $color
+  }
 
-parse_git_branch(){
-  if git rev-parse --git-dir >/dev/null 2>&1
-  then
-    gitver=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
-  else
-    return 0
-  fi
-  echo -e $gitver
-}
+  parse_git_branch(){
+    if git rev-parse --git-dir >/dev/null 2>&1
+    then
+      gitver=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
+    else
+      return 0
+    fi
+    echo -e $gitver
+  }
 
-PROMPT_COMMAND=$(
-cat<<'EOF'
+  PROMPT_COMMAND=$(
+  cat<<'EOF'
 
 _temp_var=$val_ret _pipe_status="${PIPESTATUS[@]}"
 
@@ -161,7 +162,8 @@ _git_prompt="\[$(git_branch_color)\]$(__git_ps1 ' (%s)')$stash\[$STOP\]" &>/dev/
 
 export PS1="$rvm_env$virtualenv$userhost:\w$_myerr$_git_prompt $_mysigil "
 EOF
-)
+  )
+fi
 
 export VISUAL=vim
 export EDITOR=vim
