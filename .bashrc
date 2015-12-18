@@ -41,12 +41,12 @@ alias bi=vim
 
 ltr()
 {
-	/bin/ls -ltrh --color=auto -F -- "$@"
+  /bin/ls -ltrh --color=auto -F -- "$@"
 }
 
 ltra()
 {
-	/bin/ls -ltrah -- "$@"
+  /bin/ls -ltrah -- "$@"
 }
 
 # man color CF http://wiki.archlinux.org/index.php/Post_Installation_Tips#Getting_a_colored_manpage
@@ -78,19 +78,19 @@ LIGHT_CYAN=$(tput setaf 6)
 STOP=$(tput sgr0)
 
 if which ec2metadata >/dev/null; then
-	#AWS machines
-	env=$(ec2metadata --security-groups|head -n 1|cut -d. -f4|sed 's#%2F#/#')
-	if [[ $env == production ]]; then
-		env="\[$RED\]prod\[$STOP\]"
-	elif [[ $env == staging ]]; then
-		env="\[$LIGHT_CYAN\]staging\[$STOP\]"
+  #AWS machines
+  env=$(ec2metadata --security-groups|head -n 1|cut -d. -f4|sed 's#%2F#/#')
+  if [[ $env == production ]]; then
+    env="\[$RED\]prod\[$STOP\]"
+  elif [[ $env == staging ]]; then
+    env="\[$LIGHT_CYAN\]staging\[$STOP\]"
   fi
 elif test -e /usr/local/rtm/bin/rtm; then
-		#OVH machines
-		env="\[$YELLOW\]ovh\[$STOP\]"
+  #OVH machines
+  env="\[$YELLOW\]ovh\[$STOP\]"
 else
-		# others
-		env="undefined"
+  # others
+  env="undefined"
 fi
 
 if ((UID==0)); then
@@ -104,62 +104,62 @@ fi
 userhost="$env|$_myuser@\h"
 
 if [[ $VIRTUAL_ENV ]]; then
-	virtualenv="($(basename $VIRTUAL_ENV))"
+  virtualenv="($(basename $VIRTUAL_ENV))"
 else
-	virtualenv=""
+  virtualenv=""
 fi
 
 if test -e $(pwd)/.ruby-version; then
-	rvm_env="{$(current_rvm_env)}"
+  rvm_env="{$(current_rvm_env)}"
 else
-	rvm_env=""
+  rvm_env=""
 fi
 
 test -e /usr/share/git/completion/git-prompt.sh && . /usr/share/git/completion/git-prompt.sh
 test -e /usr/lib/git-core/git-sh-prompt && . /usr/lib/git-core/git-sh-prompt
 
 git_branch_color(){
-    if git rev-parse --git-dir >/dev/null 2>&1
+  if git rev-parse --git-dir >/dev/null 2>&1
+  then
+    color=""
+    if git diff --quiet 2>/dev/null >&2
     then
-        color=""
-        if git diff --quiet 2>/dev/null >&2
-        then
-            color="$GREEN"
-        else
-            color="$YELLOW"
-        fi
+      color="$GREEN"
     else
-        return 0
+      color="$YELLOW"
     fi
-    echo -ne $color
+  else
+    return 0
+  fi
+  echo -ne $color
 }
 
 parse_git_branch(){
   if git rev-parse --git-dir >/dev/null 2>&1
   then
-      gitver=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
+    gitver=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
   else
-      return 0
+    return 0
   fi
   echo -e $gitver
 }
 
 PROMPT_COMMAND=$(
-	cat<<'EOF'
+cat<<'EOF'
 
-  _temp_var=$val_ret _pipe_status="${PIPESTATUS[@]}"
+_temp_var=$val_ret _pipe_status="${PIPESTATUS[@]}"
 
-    if((val_ret==0)); then
-        _temp_var=$(( $(tr -s " " "+" <<< "$_pipe_status") ))
-    else
-        _temp_var=$val_ret
-    fi
+if((val_ret==0)); then
+  _temp_var=$(( $(tr -s " " "+" <<< "$_pipe_status") ))
+else
+  _temp_var=$val_ret
+fi
 
-    (($_temp_var > 0)) && _myerr="|\[$RED\]ERROR:$(( $(tr -s " " "+" <<< "$_pipe_status") ))\[$STOP\]|" || _myerr=
+(($_temp_var > 0)) && _myerr="|\[$RED\]ERROR:$(( $(tr -s " " "+" <<< "$_pipe_status") ))\[$STOP\]|" || _myerr=
 
-	_git_prompt="\[$(git_branch_color)\]$(__git_ps1 ' (%s)')$stash\[$STOP\]" &>/dev/null
+_git_prompt="\[$(git_branch_color)\]$(__git_ps1 ' (%s)')$stash\[$STOP\]" &>/dev/null
 
-	export PS1="$rvm_env$virtualenv$userhost:\w$_myerr$_git_prompt $_mysigil "
+export PS1="$rvm_env$virtualenv$userhost:\w$_myerr$_git_prompt $_mysigil "
 EOF
 )
 
