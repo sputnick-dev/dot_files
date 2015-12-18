@@ -15,11 +15,11 @@ export export HISTTIMEFORMAT='%F %T ' # 2  2008-08-05 19:02:39 command
 
 unset HISTFILESIZE
 HISTSIZE=10000
-# PROMPT_COMMAND="history -a" 									# ( voir /etc/prompt )
+# PROMPT_COMMAND="history -a" 					# ( voir /etc/prompt )
 export HISTSIZE
-###shopt -s checkwinsize 										# check the window size after each command and, if necessary,
+###shopt -s checkwinsize 						# check the window size after each command and, if necessary,
 
-[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"					# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"	# make less more friendly for non-text input files, see lesspipe(1)
 
 
 # enable color support of ls and also add handy aliases
@@ -67,53 +67,54 @@ PS2=''
 
 export PAGER="/usr/bin/less -IJKMRW --shift 5"
 
-PURPLE=$(tput setaf 5)
-RED=$(tput setaf 1)
-BLINKING_RED=$(tput blink; tput bold; tput setaf 1)
-WHITE=$(tput setaf 7)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-CYAN=$(tput setaf 4)
-LIGHT_CYAN=$(tput setaf 6)
-STOP=$(tput sgr0)
+if [[ -t 0 ]]; then
+  PURPLE=$(tput setaf 5)
+  RED=$(tput setaf 1)
+  BLINKING_RED=$(tput blink; tput bold; tput setaf 1)
+  WHITE=$(tput setaf 7)
+  GREEN=$(tput setaf 2)
+  YELLOW=$(tput setaf 3)
+  CYAN=$(tput setaf 4)
+  LIGHT_CYAN=$(tput setaf 6)
+  STOP=$(tput sgr0)
 
-if which ec2metadata >/dev/null; then
-  #AWS machines
-  env=$(ec2metadata --security-groups|head -n 1|cut -d. -f4|sed 's#%2F#/#')
-  if [[ $env == production ]]; then
-    env="\[$RED\]prod\[$STOP\]"
-  elif [[ $env == staging ]]; then
-    env="\[$LIGHT_CYAN\]staging\[$STOP\]"
+  if which ec2metadata >/dev/null; then
+    #AWS machines
+    env=$(ec2metadata --security-groups|head -n 1|cut -d. -f4|sed 's#%2F#/#')
+    if [[ $env == production ]]; then
+      env="\[$RED\]prod\[$STOP\]"
+    elif [[ $env == staging ]]; then
+      env="\[$LIGHT_CYAN\]staging\[$STOP\]"
+    fi
+  elif test -e /usr/local/rtm/bin/rtm; then
+    #OVH machines
+    env="\[$YELLOW\]ovh\[$STOP\]"
+  else
+    # others
+    env="undefined"
   fi
-elif test -e /usr/local/rtm/bin/rtm; then
-  #OVH machines
-  env="\[$YELLOW\]ovh\[$STOP\]"
-else
-  # others
-  env="undefined"
-fi
 
-if ((UID==0)); then
-  _myuser="\[$RED\]ROOT\[$STOP\]"
-  _mysigil='#'
-else
-  _myuser="\[$GREEN\]\u\[$STOP\]"
-  _mysigil='$'
-fi
+  if ((UID==0)); then
+    _myuser="\[$RED\]ROOT\[$STOP\]"
+    _mysigil='#'
+  else
+    _myuser="\[$GREEN\]\u\[$STOP\]"
+    _mysigil='$'
+  fi
 
-userhost="$env|$_myuser@\h"
+  userhost="$env|$_myuser@\h"
 
-if [[ $VIRTUAL_ENV ]]; then
-  virtualenv="($(basename $VIRTUAL_ENV))"
-else
-  virtualenv=""
-fi
+  if [[ $VIRTUAL_ENV ]]; then
+    virtualenv="($(basename $VIRTUAL_ENV))"
+  else
+    virtualenv=""
+  fi
 
-if test -e $(pwd)/.ruby-version; then
-  rvm_env="{$(current_rvm_env)}"
-else
-  rvm_env=""
-fi
+  if test -e $(pwd)/.ruby-version; then
+    rvm_env="{$(current_rvm_env)}"
+  else
+    rvm_env=""
+  fi
 
   test -e /usr/share/git/completion/git-prompt.sh && . /usr/share/git/completion/git-prompt.sh
   test -e /usr/lib/git-core/git-sh-prompt && . /usr/lib/git-core/git-sh-prompt
