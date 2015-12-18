@@ -1,0 +1,400 @@
+set nocompatible
+set backspace=indent,eol,start "
+set background=dark
+
+" avoit taking age to paste :
+set clipboard=unnamed
+
+" buffer for files                                                                                                                                                                                         
+set viminfo='50,\"1000
+set history=100
+
+" highlight /search
+set hlsearch
+
+" Disable highlighting after search. Too distracting.
+set nohlsearch
+
+" Use utf8
+set encoding=utf-8 
+"set fileencoding=utf-8 
+"set fileencodings=utf-8,latin1
+
+" Ignore certain filetypes when doing filename completion
+set wildignore=*.swp,*.pyc,*.bak
+
+" Automatically read files which have been changed outside of Vim, if we
+" haven't changed it already.
+set autoread
+
+" color
+syntax on
+colorscheme sputnick
+let php_sql_query=1
+
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal g'\"" | endif
+endif
+
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+" http://stackoverflow.com/questions/540721/compile-directly-from-vim
+au FileType c setlocal makeprg=g++\ %\ -Wall
+au FileType cpp setlocal makeprg=g++\ %\ -Wall
+
+" compiler le c/c++ avec :make et lancer l'executable
+autocmd QuickfixCmdPost make call AfterMakeC()
+function! AfterMakeC()
+    " No any error after make
+    if len(getqflist()) == 0
+        !./a.out
+    endif
+    " :~)
+endfunction
+
+" vim-python2 package
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+" Uncomment the following to have Vim load indentation rules according to the
+" detected filetype. Per default Debian Vim only load filetype specific
+" plugins.
+if has("autocmd")
+  filetype indent on
+endif
+
+filetype plugin on
+
+" The following are commented out as they cause vim to behave a lot
+" differently from regular Vi. They are highly recommended though.
+set showcmd		" Show (partial) command in status line.
+set laststatus=2
+set statusline=%<%f%m\ %r\ %h%=%l,%c\ %p%%
+set showmatch		" Show matching brackets.
+set ignorecase		" Do case insensitive matching
+set smartcase		" Do smart case matching
+set incsearch		" Incremental search
+set autowrite		" Automatically save before commands like :next and :make
+set hidden             " Hide buffers when they are abandoned
+set mouse=v
+"set ttymouse=xterm2
+"set mouse-=a		" Enable mouse usage (all modes) in terminals
+
+" skeleton
+autocmd BufNewFile *Test.class.php 0r ~/.vim/skeleton.Test.class.php
+autocmd BufNewFile *.bash 0r ~/.vim/skeleton.bash
+autocmd BufNewFile *.pl 0r ~/.vim/skeleton.pl
+autocmd BufNewFile *.pm 0r ~/.vim/skeleton.pm
+autocmd BufNewFile *.py 0r ~/.vim/skeleton.py
+autocmd BufNewFile *.html 0r ~/.vim/skeleton.html
+"autocmd BufNewFile *\(Test*\)\@!*.php And 0r ~/.vim/skeleton.php
+autocmd BufNewFile *\(Test\)\@<!.*php 0r ~/.vim/skeleton.php
+autocmd BufNewFile *.js 0r ~/.vim/skeleton.js
+autocmd BufNewFile *.user.js 0r ~/.vim/skeleton\.user\.js
+autocmd BufNewFile *.awk 0r ~/.vim/skeleton.awk
+autocmd BufNewFile *.sed 0r ~/.vim/skeleton.sed
+autocmd BufNewFile *.c 0r ~/.vim/skeleton.c
+autocmd BufNewFile *.c 0r ~/.vim/skeleton.class.php
+autocmd BufNewFile PKGBUILD 0r ~/.vim/skeleton.PKGBUILD
+autocmd BufNewFile *.xml 0r ~/.vim/skeleton.xml
+autocmd BufNewFile Dockerfile 0r ~/.vim/skeleton.Dockerfile
+
+"autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=fr
+
+function HtmlEscape()
+  silent s/À/\&Agrave;/eg
+  silent s/Á/\&Aacute;/eg
+  silent s/Â/\&Acirc;/eg
+  silent s/Ã/\&Atilde;/eg
+  silent s/Ä/\&Auml;/eg
+  silent s/Å/\&Aring;/eg
+  silent s/Æ/\&AElig;/eg
+  silent s/Ç/\&Ccedil;/eg
+  silent s/È/\&Egrave;/eg
+  silent s/É/\&Eacute;/eg
+  silent s/Ê/\&Ecirc;/eg
+  silent s/Ë/\&Euml;/eg
+  silent s/Ì/\&Igrave;/eg
+  silent s/Í/\&Iacute;/eg
+  silent s/Î/\&Icirc;/eg
+  silent s/Ï/\&Iuml;/eg
+  silent s/Ð/\&ETH;/eg
+  silent s/Ñ/\&Ntilde;/eg
+  silent s/Ò/\&Ograve;/eg
+  silent s/Ó/\&Oacute;/eg
+  silent s/Ô/\&Ocirc;/eg
+  silent s/Õ/\&Otilde;/eg
+  silent s/Ö/\&Ouml;/eg
+  silent s/Ø/\&Oslash;/eg
+  silent s/Ù/\&Ugrave;/eg
+  silent s/Ú/\&Uacute;/eg
+  silent s/Û/\&Ucirc;/eg
+  silent s/Ü/\&Uuml;/eg
+  silent s/Ý/\&Yacute;/eg
+  silent s/Þ/\&THORN;/eg
+  silent s/ß/\&szlig;/eg
+  silent s/à/\&agrave;/eg
+  silent s/á/\&aacute;/eg
+  silent s/â/\&acirc;/eg
+  silent s/ã/\&atilde;/eg
+  silent s/ä/\&auml;/eg
+  silent s/å/\&aring;/eg
+  silent s/æ/\&aelig;/eg
+  silent s/ç/\&ccedil;/eg
+  silent s/è/\&egrave;/eg
+  silent s/é/\&eacute;/eg
+  silent s/ê/\&ecirc;/eg
+  silent s/ë/\&euml;/eg
+  silent s/ì/\&igrave;/eg
+  silent s/í/\&iacute;/eg
+  silent s/î/\&icirc;/eg
+  silent s/ï/\&iuml;/eg
+  silent s/ð/\&eth;/eg
+  silent s/ñ/\&ntilde;/eg
+  silent s/ò/\&ograve;/eg
+  silent s/ó/\&oacute;/eg
+  silent s/ô/\&ocirc;/eg
+  silent s/õ/\&otilde;/eg
+  silent s/ö/\&ouml;/eg
+  silent s/ø/\&oslash;/eg
+  silent s/ù/\&ugrave;/eg
+  silent s/ú/\&uacute;/eg
+  silent s/û/\&ucirc;/eg
+  silent s/ü/\&uuml;/eg
+  silent s/ý/\&yacute;/eg
+  silent s/þ/\&thorn;/eg
+  silent s/ÿ/\&yuml;/eg
+endfunction
+
+function HtmlUnEscape()
+  silent s/\&Agrave;/À/eg
+  silent s/\&Aacute;/Á/eg
+  silent s/\&Acirc;/Â/eg
+  silent s/\&Atilde;/Ã/eg
+  silent s/\&Auml;/Ä/eg
+  silent s/\&Aring;/Å/eg
+  silent s/\&AElig;/Æ/eg
+  silent s/\&Ccedil;/Ç/eg
+  silent s/\&Egrave;/È/eg
+  silent s/\&Eacute;/É/eg
+  silent s/\&Ecirc;/Ê/eg
+  silent s/\&Euml;/Ë/eg
+  silent s/\&Igrave;/Ì/eg
+  silent s/\&Iacute;/Í/eg
+  silent s/\&Icirc;/Î/eg
+  silent s/\&Iuml;/Ï/eg
+  silent s/\&ETH;/Ð/eg
+  silent s/\&Ntilde;/Ñ/eg
+  silent s/\&Ograve;/Ò/eg
+  silent s/\&Oacute;/Ó/eg
+  silent s/\&Ocirc;/Ô/eg
+  silent s/\&Otilde;/Õ/eg
+  silent s/\&Ouml;/Ö/eg
+  silent s/\&Oslash;/Ø/eg
+  silent s/\&Ugrave;/Ù/eg
+  silent s/\&Uacute;/Ú/eg
+  silent s/\&Ucirc;/Û/eg
+  silent s/\&Uuml;/Ü/eg
+  silent s/\&Yacute;/Ý/eg
+  silent s/\&THORN;/Þ/eg
+  silent s/\&szlig;/ß/eg
+  silent s/\&agrave;/à/eg
+  silent s/\&aacute;/á/eg
+  silent s/\&acirc;/â/eg
+  silent s/\&atilde;/ã/eg
+  silent s/\&auml;/ä/eg
+  silent s/\&aring;/å/eg
+  silent s/\&aelig;/æ/eg
+  silent s/\&ccedil;/ç/eg
+  silent s/\&egrave;/è/eg
+  silent s/\&eacute;/é/eg
+  silent s/\&ecirc;/ê/eg
+  silent s/\&euml;/ë/eg
+  silent s/\&igrave;/ì/eg
+  silent s/\&iacute;/í/eg
+  silent s/\&icirc;/î/eg
+  silent s/\&iuml;/ï/eg
+  silent s/\&eth;/ð/eg
+  silent s/\&ntilde;/ñ/eg
+  silent s/\&ograve;/ò/eg
+  silent s/\&oacute;/ó/eg
+  silent s/\&ocirc;/ô/eg
+  silent s/\&otilde;/õ/eg
+  silent s/\&ouml;/ö/eg
+  silent s/\&oslash;/ø/eg
+  silent s/\&ugrave;/ù/eg
+  silent s/\&uacute;/ú/eg
+  silent s/\&ucirc;/û/eg
+  silent s/\&uuml;/ü/eg
+  silent s/\&yacute;/ý/eg
+  silent s/\&thorn;/þ/eg
+  silent s/\&yuml;/ÿ/eg
+endfunction
+
+map <F2> :set number!<CR>:set number?<CR>
+
+"map <silent> <c-h> :call HtmlEscape()<CR>
+"map <silent> <c-u> :call HtmlUnEscape()<CR>
+map <F3> :call HtmlEscape()<CR>
+map <F4> :call HtmlUnEscape()<CR>
+
+" permet de naviguer dans les buffers ( :e )
+nmap <C-B> :bnext <cr>
+"nmap <F6> :syntax on<CR> | :colorscheme sputnick<CR>
+
+" Active la completion avec les touches ctrl-espace
+vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
+
+" quotes sur toutes les $variables non protegees :
+"map <C-S> :%s:\v"@<!\$(\k+):"$\1":gc<CR>
+map <F5> :%s:\v"@<!\$(\k+):"$\1":gc<CR>
+
+" ouvrir un popup pour browser un fichier a ouvrir en tab
+"nmap <M-F6> :tabe `zenity --file-selection` <cr>
+map <F6> :tabe `zenity --file-selection` <cr>
+
+" creer des lignes vides sans ^O + esc : "]<Space>" and  "[<Space>" on peut aussi faire "3]<Space>" adds three lines below
+"nnoremap <silent> [<Space> :<C-U>put!=repeat(nr2char(10),v:count)<Bar>']+1<CR>
+"map <F7> <Space> :<C-U>put!=repeat(nr2char(10),v:count)<Bar>'<CR>
+map <F7> o<Esc>
+map <F8> O<Esc>
+map <F9> :Date<CR>
+
+"map <C-P> :set paste<CR>:set nopaste<CR>
+"map <F10> :set paste<CR>
+"map <F11> :set nopaste<CR>
+
+" middle of the current line
+" http://superuser.com/questions/216411/go-to-middle-of-line-in-vim
+map <F10> :call cursor(0, len(getline('.'))/2)<CR>
+" toggle paste/no paste
+map <F11> :set paste!<CR>:set paste?<CR>
+" Supprime tout les blancs en fin de ligne (touche _ et s)
+"nmap _s :%s/ *$//<CR>
+map <F12>  :%s/ *$// \| nohl<CR>
+
+" set expandtab
+" set nobackup                    " pas de fichier backup
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+
+" configure expanding of tabs for various file types
+"au BufRead,BufNewFile *.py set expandtab textwidth=80
+au BufRead,BufNewFile *.c set noexpandtab
+au BufRead,BufNewFile *.h set noexpandtab
+au BufRead,BufNewFile Makefile* set noexpandtab
+
+" " This mapping allows to stay in visual mode when indenting with < and >
+" vnoremap > >gv
+" vnoremap < <gv
+" noremap <c-]> g<c-]>
+" noremap <c-g> g<c-g>
+
+" configure editor with tabs and nice stuff...
+set expandtab           " enter spaces when tab is pressed
+" set textwidth=80        " break lines when line length increases
+" indentation style
+set tabstop=2           " use 4 spaces to represent tab
+set softtabstop=2
+set shiftwidth=2        " number of spaces to use for auto indent
+set autoindent          " copy indent from current line when starting a new line
+
+" make backspaces more powerfull
+set backspace=indent,eol,start
+
+" declaration de variable
+let mytag="sputnick <gilles@botify.com>"
+" definition de commande + concatenation (:InsertTime)
+" TODO : test on .ext to change the comment string : # perl, bash, python // C, javascript
+command! Date :normal a<C-R>="# " . strftime('%F %H:%M:%S.0 %z') . " / " . mytag<CR>
+
+" :SudoSave will save a file with root rights
+command! SudoSave w !sudo tee %
+
+"" Update a timestamp on BufWrite
+"" Barry Arthur, 2012 04 04
+"" bairui freenode #vim
+"" https://gist.github.com/2297202
+"" adapted 20120531 by sputnick
+"
+
+" http://stackoverflow.com/questions/14226376/vim-function-update-timestamp-on-event-bufwrite-to-be-improved/14241638#14241638
+map :x :wq
+function! UpdateTimestamp()
+  " Removed “.*” from the end of the pattern because it is pointless
+  " Also made it use very-magic mode because otherwise it looks bad (too many escapes)
+  " Also replaced \d\{2\} with \d\d because \d\d takes less characters
+  " let lnr=search('\v^(\#|\/\/)\s+\d{4}\-\d\d\-\d\d\s+\d\d\:\d\d\:\d\d\.\d+\s+\+\d{4}\s+\/\s+\VMe <me@domain.tld>', 'wn')
+  " 2013-01-12 13:04:03.0 +0100 / Gilles Quenot <gilles.quenot@afnic.fr>
+  let lnr=search('\v^(\#|\/\/)\s+\d{4}\-\d\d\-\d\d\s+\d\d\:\d\d\:\d\d\.\d+\s+\+\d{4}\s+\/\s+\VGilles Quenot <gilles@botify.com>>', 'wn')
+  let lnr2=search('\v^ENV REFRESHED_AT\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\.\d+\s+\+\d+', 'wn')
+
+  if lnr2
+    call setline(lnr2, matchstr(getline(lnr2), '^')."ENV REFRESHED_AT " . strftime('%F %H:%M:%S.0 %z'))
+  endif
+
+  if lnr
+    call setline(lnr, matchstr(getline(lnr), '^\S\+')." " . strftime('%F %H:%M:%S.0 %z') . " / Gilles Quenot <gilles@botify.com>")
+  endif
+
+    " Matchstr gets comment leader. Above regex intended to work with # or // comments, but \=expression supported only the former, this got fixed
+    "call setline(lnrf, matchstr(getline(lnrf), '^\S\+')." " . strftime('%F %H:%M:%S.0 %z') . " / Gilles Quenot <gilles.quenot@sputnick.fr>")
+endfunction
+au BufWrite * call UpdateTimestamp()
+
+
+function! LastModified()
+  if &modified
+    let save_cursor = getpos(".")
+    let n = min([20, line("$")])
+    keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified: \).*#\1' .
+          \ strftime('%a %b %d, %Y  %I:%M%p') . '#e'
+    call histdel('search', -1)
+    call setpos('.', save_cursor)
+  endif
+endfun
+autocmd BufWritePre * call LastModified()
+
+
+" http://vim.wikia.com/wiki/Step_increment_and_replace
+command -nargs=+ SReplace call StepReplace(<f-args>)
+"makes use of register y
+function StepReplace(...)
+  if a:0 == 1
+    let @y = input("Replace with: ", @y)
+    let y = @y
+    if @y =~ "\\d\\+$"
+      let n = substitute(@y, ".\\{-}\\(\\d\\+\\)$", "\\1", "") + a:1
+      let @y = substitute(@y, "\\(.\\{-}\\)\\d\\+$", "\\1".n, "")
+    endif
+    return y
+  elseif a:0 == 3
+    let @y = a:2
+    execute "%s/".a:1."/\\=StepReplace(".a:3.")/".(&gdefault ? "" : "g")."c"
+  else
+    echo "Usage: SReplace <search> <substitute> <increment>"
+  endif
+endfunction
+
+" Protect large files from sourcing and other overhead.
+" http://vim.wikia.com/wiki/Faster_loading_of_large_files
+" Files become read only
+if !exists("my_auto_commands_loaded")
+  let my_auto_commands_loaded = 1
+  " Large files are > 10M
+  " Set options:
+  " eventignore+=FileType (no syntax highlighting etc
+  " assumes FileType always on)
+  " noswapfile (save copy of file)
+  " bufhidden=unload (save memory when other file is viewed)
+  " buftype=nowritefile (is read-only)
+  " undolevels=-1 (no undo possible)
+  let g:LargeFile = 1024 * 1024 * 10
+  augroup LargeFile
+    autocmd BufReadPre * let f=expand("<afile>") | if getfsize(f) > g:LargeFile | set eventignore+=FileType | setlocal noswapfile bufhidden=unload buftype=nowrite undolevels=-1 | else | set eventignore-=FileType | endif
+    augroup END
+  endif
+  " :let g:LargeFile=10 pour changer
+
