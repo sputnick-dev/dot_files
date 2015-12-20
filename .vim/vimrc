@@ -73,6 +73,7 @@ filetype plugin on
 set showcmd		" Show (partial) command in status line.
 set laststatus=2
 set statusline=%<%f%m\ %r\ %h%=%l,%c\ %p%%
+
 set showmatch		" Show matching brackets.
 set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
@@ -301,6 +302,9 @@ set softtabstop=2
 set shiftwidth=2        " number of spaces to use for auto indent
 set autoindent          " copy indent from current line when starting a new line
 
+" python 4 spaces indents, instead of 2
+autocmd FileType python set shiftwidth=4
+
 " make backspaces more powerfull
 set backspace=indent,eol,start
 
@@ -309,6 +313,21 @@ let mytag="sputnick <gilles@botify.com>"
 " definition de commande + concatenation (:InsertTime)
 " TODO : test on .ext to change the comment string : # perl, bash, python // C, javascript
 command! Date :normal a<C-R>="# " . strftime('%F %H:%M:%S.0 %z') . " / " . mytag<CR>
+
+" +x rights if file begins with #! or contains "/bin/" in its path
+function ModeChange()
+  if getline(1) =~ "^#!" || getline(1) =~ "/bin/"
+    silent !chmod +x <afile>
+  endif
+endfunction
+
+au BufWritePost * call ModeChange()
+
+" Instead of reverting the cursor to the last position in the buffer, we
+" set it to the first line when editing a git commit message
+"
+" taken from: https://github.com/keelerm84/spf13-vim/commit/1eb005b
+au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " :SudoSave will save a file with root rights
 command! SudoSave w !sudo tee %
