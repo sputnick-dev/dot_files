@@ -1,0 +1,13 @@
+[user]
+	name = Gilles Quenot
+	email = gilles@botify.com
+[push]
+	default = simple
+[core]
+	excludesfile = ~/.gitignore
+[alias]
+  root = rev-parse --show-toplevel
+	logtree = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+  cleanupbranchs = "!git branch --merged | grep  -v '\\*\\|master\\|devel' | xargs -n 1 git branch -d"
+[pull]
+	rebase = true
