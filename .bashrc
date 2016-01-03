@@ -168,4 +168,4 @@ fi
 
 export VISUAL=vim
 export EDITOR=vim
-
+export PYTHONDONTWRITEBYTECODE=1
