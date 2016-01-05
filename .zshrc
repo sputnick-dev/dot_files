@@ -10,8 +10,8 @@ bindkey '^[[3~' delete-char
 bindkey '^R' history-incremental-search-backward
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
-bindkey '^[[1;5D' emacs-backward-word
-bindkey '^[[1;5C ' emacs-forward-word
+bindkey '[1;5C' emacs-forward-word
+bindkey '[1;5D' emacs-backward-word
 
 # My own options (see man zshoptions)
 # equivalent from bash: shopt
@@ -110,15 +110,13 @@ function sp() {
   fi
 }
 
-autoload -U colors && colors
-
 setopt prompt_subst
 autoload -Uz vcs_info
 
 function +vi-git-untracked() {
   if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
   [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
-  hook_com[unstaged]+='%F{1}?? %f'
+  hook_com[unstaged]+='%F{red}??%f'
 fi
 }
 
@@ -148,7 +146,7 @@ function +vi-git-stash() {
 
     if [[ -s ${hook_com[base]}/.git/refs/stash ]] ; then
         stashes=$(git stash list 2>/dev/null | wc -l)
-        hook_com[misc]+="%F{white}(%F{1}stash=${stashes}%F{white})"
+        hook_com[misc]+="%f (%F{1}STASH=${stashes}%f)"
     fi
 }
 
@@ -156,17 +154,19 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git*:*' get-revision true
 zstyle ':vcs_info:git*:*' check-for-changes true
 
-zstyle ':vcs_info:*' stagedstr 'M' 
+#zstyle ':vcs_info:*' stagedstr '%F{3}A%f' 
+zstyle ':vcs_info:*' stagedstr '%F{3}A%f' 
 zstyle ':vcs_info:*' unstagedstr 'M' 
-zstyle ':vcs_info:*' actionformats '%F{white}(%F{2}%b%F{3}|%F{1}%a%F{white})  '
-zstyle ':vcs_info:*' formats '%F{2}(%b%F{2}) %F{2}%c%F{3}%u%f%m'
+zstyle ':vcs_info:*' actionformats '%f(%F{2}%b%F{3}|%F{1}%a%f)  '
+# format the git part
+zstyle ':vcs_info:*' formats '%f(%b) %F{2}%c%F{3}%u%m%f'
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-stash git-st
 zstyle ':vcs_info:*' enable git 
 #zstyle ':vcs_info:*+*:*' debug true
 
 # same as PROMPT_COMMAND in bash
 precmd () { vcs_info }
+# improve by putting branch name is red if branch is not clean
 # conditional on exit code: %(?..%F) on affiche le code de retour uniquement si il est > 0
-RPROMPT='%(?..[%F{red}ERROR%F{white}:%F{red}%?%F{white}])'
-PROMPT='%F{green}%n%F{orange}@%F{yellow}%m:%F{white}%10~ ${vcs_info_msg_0_} $reset_color
-%# '
+RPROMPT='%(?..[%F{red}ERROR%F{white}:%F{red}%?%f])'
+PROMPT='%F{green}%n%F{orange}@%F{yellow}%m:%F{7}%3~%f ${vcs_info_msg_0_} %f%# '
