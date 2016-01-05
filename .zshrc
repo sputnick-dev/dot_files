@@ -44,8 +44,8 @@ ssh-add -L |grep "^ssh" >/dev/null || ssh-add
 
 # Environment variables
 PATH=$PATH:$HOME/bin
-export SUDO_EDITOR=vi
-export SVN_EDITOR=vi
+export SUDO_EDITOR=vim
+export SVN_EDITOR=vim
 
 # Automatic files handling
 autoload zsh-mime-setup
