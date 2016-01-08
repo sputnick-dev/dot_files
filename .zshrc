@@ -15,6 +15,8 @@ bindkey '[1;5D' emacs-backward-word
 
 # My own options (see man zshoptions)
 # equivalent from bash: shopt
+#
+setopt no_rm_star_silent
 setopt auto_cd
 setopt auto_pushd
 setopt cdable_vars
