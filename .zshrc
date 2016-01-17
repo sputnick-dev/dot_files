@@ -168,5 +168,6 @@ zstyle ':vcs_info:*' enable git
 precmd () { vcs_info }
 # improve by putting branch name is red if branch is not clean
 # conditional on exit code: %(?..%F) on affiche le code de retour uniquement si il est > 0
+# conditional root or not %(#)
 RPROMPT='%(?..[%F{red}ERROR%F{white}:%F{red}%?%f])'
-PROMPT='%F{green}%n%F{orange}@%F{yellow}%m:%F{7}%3~%f ${vcs_info_msg_0_} %f%# '
+PROMPT='%(#~%F{red}~%F{green})%n%F{orange}@%F{yellow}%m:%F{7}%3~%f ${vcs_info_msg_0_}%f%# '
