@@ -48,6 +48,7 @@ ssh-add -L |grep "^ssh" >/dev/null || ssh-add
 PATH=$PATH:$HOME/bin
 export SUDO_EDITOR=vim
 export SVN_EDITOR=vim
+export GIT_EDITOR=vim
 
 # Automatic files handling
 autoload zsh-mime-setup
