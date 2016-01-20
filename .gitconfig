@@ -6,8 +6,11 @@
 [core]
 	excludesfile = ~/.gitignore
 [alias]
+  co = checkout
   root = rev-parse --show-toplevel
 	logtree = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit --all
   cleanupbranchs = "!git branch --merged | grep  -v '\\*\\|master\\|devel' | xargs -n 1 git branch -d"
+  listchangedfilesfrombranch = "!git diff $(git branch | grep -oE 'master|devel').. --name-only --diff-filter=A"
+  pr = "!git checkout $(git branch | grep -oP '\b(master|devel)\b'); git pull --rebase origin $(git branch | grep -oP '\b(master|devel)\b'); git checkout -; git rebase $(git branch | grep -oP '\b(master|devel)\b')"
 [pull]
 	rebase = true
