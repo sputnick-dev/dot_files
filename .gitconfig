@@ -1,16 +1,20 @@
 [user]
 	name = Gilles Quenot
-	email = gilles@botify.com
+	email = gilles.quenot@sputnick.fr
 [push]
 	default = simple
 [core]
 	excludesfile = ~/.gitignore
 [alias]
   co = checkout
+  st = status
   root = rev-parse --show-toplevel
-	logtree = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+  logtree = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit --all
   cleanupbranchs = "!git branch --merged | grep  -v '\\*\\|master\\|devel' | xargs -n 1 git branch -d"
+  cleanupbranchsdryrun = "!git branch --merged | grep  -v '\\*\\|master\\|devel'"
   listchangedfilesfrombranch = "!git diff $(git branch | grep -oE 'master|devel').. --name-only --diff-filter=A"
+  branchslatest = "!select branch in $(git branch --sort=-committerdate | fgrep -v '* '); do git co \"$branch\"; break; done"
   pr = "!git checkout $(git branch | grep -oP '\b(master|devel)\b'); git pull --rebase origin $(git branch | grep -oP '\b(master|devel)\b'); git checkout -; git rebase $(git branch | grep -oP '\b(master|devel)\b')"
+  remoteco = "! printf 'git checkout -t origin/<branch>\n'"
 [pull]
 	rebase = true
